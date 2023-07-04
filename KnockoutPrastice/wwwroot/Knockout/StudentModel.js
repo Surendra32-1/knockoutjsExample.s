@@ -9,5 +9,5 @@ function StudentModel(item)
     self.address = ko.observable(item.address || "");
     self.grade = ko.observable(item.grade || 0);
     self.gender = ko.observable(item.gender ||"Male");
-    self.schoolbranch = ko.observableArray(item.schoolbranch);
+    self.schoolBranch = ko.observable(item.schoolBranch || '');
 }

@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                     <label class="label-control">School Branch</label>
-                    <select data-bind="options:$root.locations , value:schoolbranch" class="form-control"></select>
+                    <select data-bind="options:$root.locations , value:schoolBranch" class="form-control"></select>
                 </div>
             <div class="text-center mt-3">
                <button data-bind="click:$root.addStudent">AddEdit</button>
@@ -58,7 +58,7 @@
                     <td data-bind="text:name"></td>
                     <td data-bind="text:address"></td>
                     <td data-bind="text:grade"></td>
-                    <td data-bind="text:schoolbranch"></td>
+                    <td data-bind="text:schoolBranch"></td>
                     <td data-bind="text:gender"></td>
                     <td >
                         <button data-bind="click:$parent.editStudent" class="btn btn-sm btn-dark"><i class="fa fa-edit"></i> Edit</button>

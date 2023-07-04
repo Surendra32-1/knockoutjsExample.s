@@ -42,6 +42,7 @@
                 ajax.put(baseUrl + "/" + self.newStudent().id(), ko.toJSON(self.newStudent())).done(function (result) {
                     self.AllStudents.replace(self.selectedStudent(), self.newStudent());
                     self.resetForm();
+
                     console.log(self.AllStudents());
                 });
                 break;
@@ -60,7 +61,7 @@
     self.editStudent = (model) => {
        // console.log(model);
         //putting model in variable that hold student object for edit purpose after converting to javascrpt
-        self.selectedStudent(ko.toJS(model));
+        self.selectedStudent(model);
        // console.log(self.selectedStudent());
         //for displaying in form convert ko to javascript object and put in newStudent
         self.newStudent(new StudentModel(ko.toJS(model)));
