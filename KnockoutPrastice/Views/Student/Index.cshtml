@@ -1,67 +1,99 @@
 ﻿@model KnockoutPrastice.Models.StudentModel
+
 <div class="row">
-    <div class=" card-body col-md-8 offset-2 ">
-        <h3>Add/Edit Student</h3>
-        <form>
-            <div data-bind="with:newStudent">
-            <div class="form-group">
-                    <label  class="label-control">Name</label>
-                    <input data-bind="value:name" class="form-control" />
-            </div>
-            <div class="form-group">
-                    <label  class="label-control">Address</label>
-                    <input data-bind="value:address" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label  class="label-control">Grade</label>
-                    <input data-bind="value:grade" class="form-control" />
-            </div>
-                <div class="form-check-inline">
-                    <label class="label-control">Gender</label>
-                    <input type="radio" name="gender" data-bind="checked:gender" value="Male" class="form-check-input"/>
-                   <label class="form-check-label">Male</label>
-                    <input type="radio" name="gender" data-bind="checked:gender" value="Female" class="form-check-input" />
-                    <label class="form-check-label">Female</label>
-                </div>
-                <div class="form-group">
-                    <label class="label-control">School Branch</label>
-                    <select data-bind="options:$root.locations , value:schoolBranch" class="form-control"></select>
-                </div>
-            <div class="text-center mt-3">
-               <button data-bind="click:$root.addStudent">AddEdit</button>
-                    <button data-bind="click:$root.resetForm">Reset</button>
-            </div>
-            </div>
-        </form>
+    <div class="d-flex col-md-4 offset-4">
+        <input data-bind="value:search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button data-bind="click:$root.searchForms" class="btn btn-outline-success" type="submit">Search</button>
     </div>
-    
+</div>
+<!-- Button trigger modal -->
+<button data-bind="click:$root.resetForm" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add Student
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add/Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class=" card-body col-md-8 offset-2 ">
+                        <form>
+                            <div data-bind="with:newStudent">
+                                <div class="form-group">
+                                    <label class="label-control">Name</label>
+                                    <input data-bind="value:name" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-control">Address</label>
+                                    <input data-bind="value:address" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-control">Grade</label>
+                                    <input data-bind="value:grade" class="form-control" />
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="label-control">Gender</label>
+                                    <input type="radio" name="gender" data-bind="checked:gender" value="Male" class="form-check-input" />
+                                    <label class="form-check-label">Male</label>
+                                    <input type="radio" name="gender" data-bind="checked:gender" value="Female" class="form-check-input" />
+                                    <label class="form-check-label">Female</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="label-control">School Branch</label>
+                                    <select data-bind="options:$root.locations , value:schoolBranch" class="form-control"></select>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="text-center mt-3">
+                    <button data-bind="click:$root.addStudent">AddEdit</button>
+                    <button data-bind="click:$root.resetForm">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<hr/>
+
+
+<hr />
 <div class="row">
-    <div class="col-md-6 offset-3">
+    <div class="col-md-8 offset-2">
         <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Grade</th>
-                        <th>Location</th>
-                        <th>Gender</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Grade</th>
+                    <th>Location</th>
+                    <th>Gender</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
             <tbody data-bind="foreach:AllStudents">
                 <tr>
-                    <td data-bind="text:id"></td>
+                  
+                    <td data-bind="text:$index()+$root.skip()+1"></td>
+                    <td data-bind="text:id" hidden></td>
                     <td data-bind="text:name"></td>
                     <td data-bind="text:address"></td>
                     <td data-bind="text:grade"></td>
                     <td data-bind="text:schoolBranch"></td>
                     <td data-bind="text:gender"></td>
-                    <td >
-                        <button data-bind="click:$parent.editStudent" class="btn btn-sm btn-dark"><i class="fa fa-edit"></i> Edit</button>
+                    <td>
+                        <button data-bind="click:$parent.editStudent" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-edit"></i> Edit</button>
                         <button data-bind="click:$parent.deleteStudent" class="btn btn-sm btn-danger"><i class="fa fa-edit"></i> Delete</button>
 
                     </td>
@@ -69,9 +101,11 @@
             </tbody>
 
         </table>
+        <button class="inline-block" data-bind="click:PreviousData,visible:skip()>0">Previous</button>
+        <button class="inline-block" data-bind="click:NextData">Next</button>
     </div>
 </div>
-<hr/>
+<hr />
 
 
 @section Scripts{
@@ -79,7 +113,9 @@
     <script src="~/knockout/studentcontroller.js"></script>
     <script src="~/knockout/studentmodel.js"></script>
 
-    <script>
-        ko.applyBindings(new StudentController());
+    <script type="text/javascript">
+        var obj = {};
+        obj = new StudentController();
+        ko.applyBindings(obj);
     </script>
 }

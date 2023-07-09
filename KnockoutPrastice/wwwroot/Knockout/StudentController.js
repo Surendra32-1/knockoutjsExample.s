@@ -1,5 +1,4 @@
-﻿function StudentController()
-{ 
+﻿function StudentController() {
     var self = this;
     self.selectedStudent = ko.observable(new StudentModel());
     self.newStudent = ko.observable(new StudentModel());
@@ -9,18 +8,30 @@
     self.locations = ko.observableArray(["Bhw", "Taulihawa", "Lumbini", "Butwal", "Shankar nagar"]);
     //array for holding student
     self.AllStudents = ko.observableArray([]);
+    self.skip = ko.observable(0);
+    self.take = ko.observable(10);
+    self.search = ko.observable("");
+    
+
+
+
     //base url
     const baseUrl = "api/StudentModels";
 
+    //search
+    self.searchForms = function () {
+        //GetAll student Data by calling baseurl and get result and map to knockoutjs from here return to AllStudents
+        ajax.get(baseUrl +"/"+ "?skip=" + ko.toJS(self.skip()) + "&take=" + ko.toJS(self.take()) + "&search=" + ko.toJS(self.search())).then(function (result) {
+            var studentData = ko.utils.arrayMap(result, function (item) {
 
-    //GetAll student Data by calling baseurl and get result and map to knockoutjs from here return to AllStudents
-    ajax.get(baseUrl).then(function (result) {
-        var studentData = ko.utils.arrayMap(result, function (item) {
-            return new StudentModel(item);
-        });
-        self.AllStudents(studentData);
-    });
+                return new StudentModel(item);
+            });
+            self.AllStudents(studentData);
+        })
 
+    }
+    //deafult calling 
+    self.searchForms();
 
     //When add button and new data field then click this method is called read self.mode() value when 1 add otherwise update
     self.addStudent = function () {
@@ -31,14 +42,14 @@
                     self.AllStudents.push(new StudentModel(result));
                     //make form clear
                     self.resetForm();
-                   
+
                 }).fails((err) => {
                     console.log(err);
                 });
                 console.log(self.AllStudents());
                 break;
             default:
-//when edit data go in form and change self.mode()=2 add button pressed 
+                //when edit data go in form and change self.mode()=2 add button pressed 
                 ajax.put(baseUrl + "/" + self.newStudent().id(), ko.toJSON(self.newStudent())).done(function (result) {
                     self.AllStudents.replace(self.selectedStudent(), self.newStudent());
                     self.resetForm();
@@ -56,29 +67,42 @@
         self.mode(mode.create);
     }
 
-    
+
     //selecting particular row data for update
     self.editStudent = (model) => {
-       // console.log(model);
+        // console.log(model);
         //putting model in variable that hold student object for edit purpose after converting to javascrpt
         self.selectedStudent(model);
-       // console.log(self.selectedStudent());
+        // console.log(self.selectedStudent());
         //for displaying in form convert ko to javascript object and put in newStudent
         self.newStudent(new StudentModel(ko.toJS(model)));
-      //  console.log(self.newStudent());
+        //  console.log(self.newStudent());
+        $('#studentModal').modal('show'); // Show the modal
         //for update change button mode other wise create
         self.mode(mode.update);
     };
 
-//method to Delete
+    //method to Delete
     self.deleteStudent = (model) => {
         var studData = ko.toJS(model);
-        ajax.delete(baseUrl + "/" + studData.id).done(function (result) {
-             //console.log(model);
+        ajax.delete(baseUrl+ "/" + studData.id).done(function (result) {
+            //console.log(model);
+            
             self.AllStudents.remove(model);
             self.AllStudents();
         });
     };
+    //to go in pervious page 
+    self.PreviousData = function () {
+        self.skip(self.skip() - self.take());
+        self.searchForms();
+    }
+    self.NextData = function () {
+
+        self.skip(self.skip() + self.take());
+      //  self.shouldShowElement = ko.observable(true);
+        self.searchForms();
+    }
 
 }
 //ajax methods
@@ -116,11 +140,11 @@ var ajax = {
     },
     delete: function (url, id) {
         //api/apiController/id
-        
+
         return $.ajax({
             method: "DELETE",
             url: url
-           
+
         });
 
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KnockoutPrastice.Data;
 using KnockoutPrastice.Models;
+using KnockoutPrastice.Utility;
 
 namespace KnockoutPrastice.Controllers.Api
 {
@@ -23,13 +24,29 @@ namespace KnockoutPrastice.Controllers.Api
 
         // GET: api/StudentModels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentModel>>> GetStudentModels()
+        public async Task<ActionResult<IEnumerable<StudentModel>>> GetStudentModels(int skip=0, int take=0, string search="")
         {
           if (_context.StudentModels == null)
           {
               return NotFound();
           }
-            return await _context.StudentModels.ToListAsync();
+            var studentData =  _context.StudentModels.AsQueryable();
+            if (!string.IsNullOrEmpty(search))
+            {
+                studentData = studentData.Where(x =>
+              x.Address.Contains(search) ||
+              x.Name.Contains(search)
+           );
+            }
+            var data = studentData
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+            if (data == null)
+            {
+                return null;
+            }
+            return data;
         }
 
         // GET: api/StudentModels/5
